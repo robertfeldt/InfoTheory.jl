@@ -2,6 +2,15 @@
 
 A Julia package for non-parametric estimation of information theoretic quantities such as entropy and mutual information.
 
+# Usage example
+
+  using InfoTheory
+
+  samples = [1.3 3.7 5.1 2.4]
+
+  # Calculate the entropy of a continuous random var from which we have samples
+  differential_entropy(samples)
+
 ## Limitations
 
 We currently need the latest versions of the Distance and NearestNeighbors packages since the KDTree implementation does not work in the versions of these libs available in the METADATA. Should soon resolve itself once packages are in sync.
