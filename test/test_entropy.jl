@@ -6,7 +6,7 @@
   expected = log(2, alpha)
 
   for k in 3:6
-    ent = entropy(samples_from_uniform_distr, k)
+    ent = differential_entropy(samples_from_uniform_distr, k)
     #println("estimated = $ent, expected = $expected")
     @test approxeq( ent, expected, 1e-1 )
   end

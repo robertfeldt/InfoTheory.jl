@@ -2,7 +2,7 @@ module InfoTheory
 
 using NearestNeighbors
 
-export entropy
+export differential_entropy
 
 include("knn_entropy.jl")
 

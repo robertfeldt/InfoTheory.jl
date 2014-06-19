@@ -1,10 +1,17 @@
-# Classic Kullback-Liebler k-nearest neighbor entropy estimator from
+# Classic Kullback-Liebler k-nearest neighbor differential entropy estimator from
 # samples from a continuous random variable. X should be a d*N dimensional 
 # matrix where each column is a d-dimensional sample from the distribution.
 #
 # Example: X = [1.3 3.7 5.1 2.4] if the distribution is 1-dimensional and
 # we have 4 samples.
-function entropy(X::Array{Float64, 2}, k=3, base=2, knnConstructor = NaiveNeighborTree)
+#
+# Differential entropy (also referred to as continuous entropy) is a concept in 
+# information theory that extends the idea of (Shannon) entropy, a measure of 
+# average surprisal of a random variable, to continuous probability distributions.
+# For more information see: http://en.wikipedia.org/wiki/Differential_entropy
+#
+# Note that differential entropy can be negative, unlike discrete entropy.
+function differential_entropy(X::Array{Float64, 2}, k=3, base=2, knnConstructor = NaiveNeighborTree)
 
   # Get dimensions
   d, N = size(X)
