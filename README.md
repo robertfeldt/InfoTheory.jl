@@ -4,7 +4,7 @@ A Julia package for non-parametric estimation of information theoretic quantitie
 
 ## Limitations
 
-We currently use only the NaiveNeighborTree from NearestNeighbors.jl since the KDTree implementation is based on a version of the Distance.jl package which is not yet available in Julia's METADATA. Thus, performance for most of our estimators is bad but will be easily fixed once the latest versions of these packages are in sync.
+We currently need the latest versions of the Distance and NearestNeighbors packages since the KDTree implementation does not work in the versions of these libs available in the METADATA. Should soon resolve itself once packages are in sync.
 
 ## Acknowledgement
 
