@@ -4,11 +4,11 @@ A Julia package for non-parametric estimation of information theoretic quantitie
 
 # Usage example
 
-  using InfoTheory
+To calculate the entropy of a 1-dimensional, continous, random variable from which we have 4 samples:
 
-  samples = [1.3 3.7 5.1 2.4]
-
-  differential_entropy(samples) # calc entropy of a continuous random var from which we have samples
+    using InfoTheory
+    samples = [1.3 3.7 5.1 2.4]
+    differential_entropy(samples)
 
 ## Limitations
 
