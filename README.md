@@ -1,4 +1,4 @@
-# InfoTheory
+# InfoTheory.jl
 
 A Julia package for non-parametric estimation of information theoretic quantities such as entropy and mutual information.
 
