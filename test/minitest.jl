@@ -1,4 +1,6 @@
-# Define a minimal testing system that can be used to test GodelTest itself.
+# Define a minimal testing system with better reporting than the standard Julia one...
+# This is taken from GodelTest; should be its own autotest package??
+
 using Base.Test
 
 module Minitest
