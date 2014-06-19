@@ -1,5 +1,9 @@
 module InfoTheory
 
-# package code goes here
+using NearestNeighbors
+
+export entropy
+
+include("knn_entropy.jl")
 
 end # module
