@@ -8,6 +8,6 @@
   for k in 3:6
     ent = differential_entropy(samples_from_uniform_distr, k)
     #println("estimated = $ent, expected = $expected")
-    @test approxeq( ent, expected, 1e-1 )
+    @test approxeq( ent, expected, 0.20 )
   end
 end

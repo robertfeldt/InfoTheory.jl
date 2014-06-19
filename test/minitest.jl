@@ -42,11 +42,20 @@ function report(tr::TestReporter)
 
 	assertions_string = numassertions == 1 ? "assertion" : "assertions"
 
+	numfailures = num_failures(tr)
+	numerrors = num_errors(tr)
+
 	println("\n", 
 		numassertions, pluralize(" assertion", numassertions), ", ",
-		num_failures(tr), pluralize(" failure", num_failures(tr)), ", ",
-		num_errors(tr), pluralize(" error", num_errors(tr))
+		numfailures, pluralize(" failure", numfailures), ", ",
+		numerrors, pluralize(" error", numerrors)
 	)
+
+	if (numfailures + numerrors) > 0
+		exit(-1)
+	else
+		exit(0)
+	end
 end
 
 TR__ = TestReporter()
