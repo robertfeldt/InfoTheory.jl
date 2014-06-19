@@ -16,7 +16,7 @@
 # states that it is from Kozachenko and Leonenko as described in the paper:
 # A. Kraskov, H. Stogbauer, and P. Grassberger. Estimating mutual information. 
 # Phys. Rev. E, 69:066138, Jun 2004.
-function differential_entropy(X::Array{Float64, 2}, k=3, base=2, knnConstructor = NaiveNeighborTree)
+function differential_entropy(X::Array{Float64, 2}, k=3, base=2, knnConstructor = KDTree)
 
   # Get dimensions
   d, N = size(X)
