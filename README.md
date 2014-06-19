@@ -1,6 +1,6 @@
 # InfoTheory
 
-A Julia package for estimating information theoretic concepts such as entroyp and mutual information.
+A Julia package for estimating information theoretic measures such as entropy and mutual information.
 
 ## Build status
 
