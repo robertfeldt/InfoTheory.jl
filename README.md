@@ -8,8 +8,7 @@ A Julia package for non-parametric estimation of information theoretic quantitie
 
   samples = [1.3 3.7 5.1 2.4]
 
-  # Calculate the entropy of a continuous random var from which we have samples
-  differential_entropy(samples)
+  differential_entropy(samples) # calc entropy of a continuous random var from which we have samples
 
 ## Limitations
 
