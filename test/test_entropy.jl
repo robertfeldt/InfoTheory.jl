@@ -1,5 +1,3 @@
-approxeq(x, y, delta = 1e-5) = abs(x-y) < delta
-
 # Uniform distribution of width alpha should have entropy of log_2(alpha)
 @repeatedly begin
   N = 1000

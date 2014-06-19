@@ -1,5 +1,5 @@
-using InfoTheory
-using Base.Test
-
-# write your own tests here
-@test 1 == 1
+include("helper.jl")
+include("minitest.jl")
+Minitest.do_tests() do
+  Minitest.include("test_entropy.jl")
+end

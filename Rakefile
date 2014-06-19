@@ -3,7 +3,7 @@ Julia = "julia03"
 
 Lib = "InfoTheory"
 
-MainCommand = "#{Julia} -L src/#{Lib}.jl -L test/helper.jl"
+MainCommand = "#{Julia} -L src/#{Lib}.jl"
 
 # The test running files for different subsets
 RunTestsFile = 'test/runtests.jl'
@@ -36,6 +36,8 @@ def create_run_test_file(filename, filesToInclude)
 			"  Minitest.include(\"#{tfr}\")"
 		end.join("\n")
 		str = <<EOS
+include("helper.jl")
+include("minitest.jl")
 Minitest.do_tests() do
 #{include_files}
 end

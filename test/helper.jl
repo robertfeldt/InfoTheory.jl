@@ -2,4 +2,4 @@ using InfoTheory
 
 NumTestRepetitions = 10
 
-include("minitest.jl")
+approxeq(x, y, delta = 1e-3) = abs(x-y) < delta
