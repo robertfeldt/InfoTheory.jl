@@ -14,4 +14,6 @@ before_install:
   - sudo apt-get install libpcre3-dev julia -y
   - if [[ -a .git/shallow ]]; then git fetch --unshallow; fi
 script:
-  - julia -e 'Pkg.init(); Pkg.clone(pwd()); Pkg.test("InfoTheory")'
+  - julia -e 'Pkg.init(); Pkg.clone("https://github.com/wildart/Distance.jl.git")'
+  - julia -e 'using InfoTheory; @assert isdefined(:InfoTheory); @assert typeof(InfoTheory) === Module'
+  - julia -L src/InfoTheory.jl test/runtests.jl
