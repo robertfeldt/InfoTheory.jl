@@ -1,5 +1,6 @@
 module InfoTheory
 
+using Distance
 using NearestNeighbors
 
 export differential_entropy

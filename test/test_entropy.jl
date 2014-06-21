@@ -88,7 +88,7 @@ nats_to_bits(natsvalue) = natsvalue / log(2.0)
 
   # Rayleigh distribution
   expected_entropy = nats_to_bits( 1 + log(scale / sqrt(2)) + eulergamma / 2 )
-  @test diff_entropy_approx_eq( Rayleigh(scale), expected_entropy, 0.20 ) 
+  @test diff_entropy_approx_eq( Rayleigh(scale), expected_entropy, 0.15 ) 
 
   # Laplace distribution
   expected_entropy = nats_to_bits( 1 + log(2 * scale) )
@@ -96,7 +96,7 @@ nats_to_bits(natsvalue) = natsvalue / log(2.0)
 
   # Gamma distribution
   alpha = rand(1:20)
-  scale = rand(0.0:1e-3:3.0)
+  scale = rand(0.1:1e-3:3.0)
   expected_entropy = nats_to_bits( log(scale * gamma(alpha)) + (1 - alpha) * digamma(alpha) + alpha )
   @test diff_entropy_approx_eq( Gamma(alpha, scale), expected_entropy, 0.20 ) 
 

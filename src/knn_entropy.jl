@@ -1,3 +1,7 @@
+# We use the max norm as default distance. In the Distance.jl package
+# the max norm is called the Chebyshev distance.
+default_knn_constructor(data) = KDTree(data, Chebyshev())
+
 # Classic Kozachenko-Leonenko k-nearest neighbor differential entropy estimator from
 # samples from a continuous random variable. X should be a d*N dimensional 
 # matrix where each column is a d-dimensional sample from the distribution.
@@ -16,7 +20,7 @@
 # states that it is from Kozachenko and Leonenko as described in the paper:
 # A. Kraskov, H. Stogbauer, and P. Grassberger. Estimating mutual information. 
 # Phys. Rev. E, 69:066138, Jun 2004.
-function differential_entropy{T <: Number}(X::Array{T, 2}, k=3, base=2, knnConstructor = KDTree)
+function differential_entropy{T <: Number}(X::Array{T, 2}, k=3, base=2, knnConstructor = default_knn_constructor)
 
   # Get dimensions
   d, N = size(X)

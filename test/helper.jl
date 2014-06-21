@@ -8,6 +8,7 @@ function approxeq(x, y, delta = 1e-3)
     error("Expected $x to be within $delta of $y (but diff is $absdelta)")
     false
   else
+    #println("Expected $x to be within $delta of $y and it was! ($absdelta)")
     true
   end
 end
