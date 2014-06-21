@@ -14,4 +14,5 @@ before_install:
   - if [[ -a .git/shallow ]]; then git fetch --unshallow; fi
 script:
   - julia -e 'Pkg.init(); Pkg.clone("https://github.com/wildart/Distance.jl.git"); Pkg.clone("https://github.com/johnmyleswhite/NearestNeighbors.jl.git")'
+  - julia -e 'Pkg.add("Distributions")'
   - julia -L src/InfoTheory.jl test/runtests.jl
