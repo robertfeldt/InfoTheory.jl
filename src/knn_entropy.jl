@@ -1,4 +1,4 @@
-# Classic Kullback-Liebler k-nearest neighbor differential entropy estimator from
+# Classic Kozachenko-Leonenko k-nearest neighbor differential entropy estimator from
 # samples from a continuous random variable. X should be a d*N dimensional 
 # matrix where each column is a d-dimensional sample from the distribution.
 #
