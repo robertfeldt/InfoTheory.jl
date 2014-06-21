@@ -16,7 +16,7 @@
 # states that it is from Kozachenko and Leonenko as described in the paper:
 # A. Kraskov, H. Stogbauer, and P. Grassberger. Estimating mutual information. 
 # Phys. Rev. E, 69:066138, Jun 2004.
-function differential_entropy(X::Array{Float64, 2}, k=3, base=2, knnConstructor = KDTree)
+function differential_entropy{T <: Number}(X::Array{T, 2}, k=3, base=2, knnConstructor = KDTree)
 
   # Get dimensions
   d, N = size(X)
@@ -26,7 +26,10 @@ function differential_entropy(X::Array{Float64, 2}, k=3, base=2, knnConstructor 
     error("k ($k) must be smaller than the number of samples ($N)")
   end
 
-  # Add small noise to break degeneracy.
+  # Add small noise to break degeneracy. This can happen if samples have limited
+  # resolution and just happen to be exactly the same even if the thing measured
+  # would not be the same. By adding a very small noise term we avoid any numerical
+  # problems because of this.
   xprim = add_noise(X, d, N, 1e-10)
 
   # Build kNN tree/graph/solution.
