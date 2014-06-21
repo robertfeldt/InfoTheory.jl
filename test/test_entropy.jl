@@ -90,4 +90,8 @@ nats_to_bits(natsvalue) = natsvalue / log(2.0)
   expected_entropy = nats_to_bits( 1 + log(scale / sqrt(2)) + eulergamma / 2 )
   @test diff_entropy_approx_eq( Rayleigh(scale), expected_entropy, 0.20 ) 
 
+  # Laplace distribution
+  expected_entropy = nats_to_bits( 1 + log(2 * scale) )
+  @test diff_entropy_approx_eq( Laplace(mu, scale), expected_entropy, 0.20 ) 
+
 end
