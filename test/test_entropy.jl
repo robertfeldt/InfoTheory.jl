@@ -57,14 +57,33 @@ end
 using Distributions
 N = 1000
 
-function diff_entropy_approx_eq(distr, expected, N = N)
+function diff_entropy_approx_eq(distr, expected, delta = 0.10, N = N)
   samples = rand(distr, N)
   ent = differential_entropy(samples')
-  approxeq(ent, expected, 0.10)
+  approxeq(ent, expected, delta)
 end
 
-# Uniform distribution
+# Convert from nats to bits
+nats_to_bits(natsvalue) = natsvalue / log(2.0)
+
 @repeatedly begin
-  a, b = extrema([rand(-100:100), rand(-100:100)])
-  @test diff_entropy_approx_eq( Uniform(a, b), log(2, b-a) )
+
+  # Uniform distribution
+  a = rand(-100.0:100.0)
+  b = rand((a+0.01):1e-5:(a+100.0))
+  expected_entropy = log(2, b-a)
+  @test diff_entropy_approx_eq( Uniform(a, b), expected_entropy, 0.15 )
+
+  # Normal distribution
+  mu = rand(-10.0:1e-6:10.0)
+  sigma = rand(0.0:1e-2:100.0)
+  expected_entropy = nats_to_bits( log(sigma * sqrt(2*pi*e)) )
+  @test diff_entropy_approx_eq( Normal(mu, sigma), expected_entropy, 0.15 ) 
+
+  # Exponential distribution
+  lambda = rand(0.0:1e-6:10.0)
+  scale = 1/lambda
+  expected_entropy = nats_to_bits( 1 - log(lambda) )
+  @test diff_entropy_approx_eq( Exponential(scale), expected_entropy, 0.15 ) 
+
 end
