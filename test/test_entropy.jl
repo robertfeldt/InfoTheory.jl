@@ -71,19 +71,23 @@ nats_to_bits(natsvalue) = natsvalue / log(2.0)
   # Uniform distribution
   a = rand(-100.0:100.0)
   b = rand((a+0.01):1e-5:(a+100.0))
-  expected_entropy = log(2, b-a)
-  @test diff_entropy_approx_eq( Uniform(a, b), expected_entropy, 0.15 )
+  expected_entropy = nats_to_bits( log(b-a) )
+  @test diff_entropy_approx_eq( Uniform(a, b), expected_entropy, 0.20 )
 
   # Normal distribution
   mu = rand(-10.0:1e-6:10.0)
   sigma = rand(0.0:1e-2:100.0)
   expected_entropy = nats_to_bits( log(sigma * sqrt(2*pi*e)) )
-  @test diff_entropy_approx_eq( Normal(mu, sigma), expected_entropy, 0.15 ) 
+  @test diff_entropy_approx_eq( Normal(mu, sigma), expected_entropy, 0.20 ) 
 
   # Exponential distribution
   lambda = rand(0.0:1e-6:10.0)
   scale = 1/lambda
   expected_entropy = nats_to_bits( 1 - log(lambda) )
-  @test diff_entropy_approx_eq( Exponential(scale), expected_entropy, 0.15 ) 
+  @test diff_entropy_approx_eq( Exponential(scale), expected_entropy, 0.20 ) 
+
+  # Rayleigh distribution
+  expected_entropy = nats_to_bits( 1 + log(scale / sqrt(2)) + eulergamma / 2 )
+  @test diff_entropy_approx_eq( Rayleigh(scale), expected_entropy, 0.20 ) 
 
 end
