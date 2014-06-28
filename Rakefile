@@ -24,7 +24,7 @@ LatestChangedTestFile = filter_latest_changed_files Dir["test/**/test*.jl"]
 
 require 'pp'
 
-def create_run_test_file(filename, filesToInclude)
+def create_run_test_file(filename, filesToInclude, pathToTests = "", charsToSkip = 5)
 
 	puts "Recreating the file #{filename}, adding files:\n"
 	pp(filesToInclude)
@@ -32,12 +32,12 @@ def create_run_test_file(filename, filesToInclude)
 
 	File.open(filename, "w") do |fh|
 		include_files = filesToInclude.map do |tf| 
-			tfr = tf[5, (tf.length-5)]
+			tfr = tf[charsToSkip, (tf.length-charsToSkip)]
 			"  Minitest.include(\"#{tfr}\")"
 		end.join("\n")
 		str = <<EOS
-include("helper.jl")
-include("minitest.jl")
+include("#{pathToTests}helper.jl")
+include("#{pathToTests}minitest.jl")
 Minitest.do_tests() do
 #{include_files}
 end
@@ -86,6 +86,20 @@ end
 desc "Run only the latest changed test file"
 task :runlatestchangedtest => RunLatestTestFile do
   sh "#{MainCommand} #{RunLatestTestFile}"
+end
+
+RunSpikesTestFile = "spikes/runtests.jl"
+SpikesTestsFiles = FileList["spikes/**/test*.jl"]
+file RunSpikesTestFile => (SpikesTestsFiles + GeneralDependencies) do
+  create_run_test_file(RunSpikesTestFile, SpikesTestsFiles, "../test/", 7)
+end
+
+Spikes = Dir["spikes/**/*.jl"] - SpikesTestsFiles
+
+desc "Test spikes"
+task :tsp => RunSpikesTestFile do
+  spikes = Spikes.select {|f| f != RunSpikesTestFile}.join(" -L ")
+  sh "#{MainCommand} -L #{spikes} #{RunSpikesTestFile}"
 end
 
 # Short hands
