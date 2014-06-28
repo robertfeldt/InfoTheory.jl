@@ -7,28 +7,15 @@ distr = SymbolDistr({0 => 0.9, 1 => 0.1})
   @test in(s, [0, 1])
 end
 
-# Create a map for the empirical distribution of samples from a discrete alphabet
-function empirical_distribution(samples)
+ed1 = empirical_distribution([:a, :b])
+@test ed1[:a] == 0.5
+@test ed1[:b] == 0.5
 
-  # Count the number of samples of each kind
-  counts = Dict{Any, Int64}()
-  for s in samples
-    counts[s] = get(counts, s, 0) + 1
-  end
+ed2 = empirical_distribution([:a, :b, :a, :a])
+@test ed2[:a] == 0.75
+@test ed2[:b] == 0.25
 
-  # Normalize to frequencies by dividing by the number of samples
-  distr = Dict{Any, Float64}()
-  for (k, v) in counts
-    distr[k] = counts[k] / length(samples)
-  end
-
-  distr
-end
-
-# Get the synchronized probability vectors for the union of the alphabets used in two
-# distributions.
-
-# Check that we get roughly the same distributions
+# Check that we get roughly the same distribution when sampling.
 N = 10000
 @repeatedly begin
   samples = [sample(distr) for i in 1:N]
