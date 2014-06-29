@@ -26,10 +26,13 @@ ed4 = empirical_distribution([1, "2", 0, 1, 1, 0, "2", 1, 1, 0])
 @test ed4["2"] == (2/10)
 
 # Check that we get roughly the same distribution when sampling.
-N = 10000
+N = 1000
+# Should be within 0.05 in probability...
+dm = JSDivergence()
+expected_bound = max(evaluate(dm, [0.9, 0.1], [0.85, 0.15]), evaluate(dm, [0.9, 0.1], [0.95, 0.05]))
 @repeatedly begin
   samples = [sample(distr) for i in 1:N]
   edistr = SymbolDistr(empirical_distribution(samples))
   d = distance(edistr, distr)
-  @test abs(distance(edistr, distr)) < 1e-3
+  @test distance(edistr, distr) < expected_bound
 end

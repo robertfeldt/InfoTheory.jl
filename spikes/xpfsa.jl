@@ -66,3 +66,4 @@ function empirical_distribution(samples)
   end
   distr
 end
+
