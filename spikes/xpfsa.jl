@@ -67,3 +67,58 @@ function empirical_distribution(samples)
   distr
 end
 
+# A symbol stream represents an actual or a modeled stream of symbols from a
+# finite alphabet.
+abstract SymbolStream
+alphabet(s::SymbolStream) = s.alphabet # Override if not explicitly saved in the stream
+
+# Return the next sample from a stream if there is one or nothing otherwise.
+next(s::SymbolStream) = nothing
+
+type WhiteNoiseStream <: SymbolStream
+  alphabet
+end
+
+sample(wns::WhiteNoiseStream) = wns.alphabet[rand(1:length(wns.alphabet))]
+
+# We can always get a next sample from a WNS.
+next(wns::WhiteNoiseStream) = sample(wns)
+
+# We can also create a WhiteNoiseStream from a symbol distribution and from
+# another SymbolStream.
+WhiteNoiseStream{ST}(sd::SymbolDistr{ST}) = WhiteNoiseStream(sd.symbols)
+WhiteNoiseStream(s::SymbolStream) = WhiteNoiseStream(alphabet(s))
+
+# A fixed stream goes through the values in a given sequence and then stops.
+type FixedStream <: SymbolStream
+  alphabet
+  values
+  index
+  max_index
+  FixedStream(values) = new(unique(values), values, 1, length(values))
+end
+
+function next(fs::FixedStream)
+  if fs.index <= fs.max_index
+    fs.index += 1
+    fs.values[fs.index-1]
+  else
+    nothing
+  end
+end
+
+# An independent stream copy emits only the symbols that match a white noise
+# version of a stream.
+type IndependentStreamCopy <: SymbolStream
+  base::SymbolStream      # The base stream that we are a copy of
+  wns::WhiteNoiseStream   # A white noise stream for the same alphabet as the base stream
+  IndependentStreamCopy(s::SymbolStream) = new(s, WhiteNoiseStream(s))
+end
+
+function next(isc::IndependentStreamCopy)
+  next_base_symbol = next(base)
+  while next_base_symbol != nothing && next_base_symbol != next(isc.wns)
+    next_base_symbol = next(base)
+  end
+  return next_base_symbol # is either nothing if the base stream is empty or it is a symbol that matched the symbol from the WhiteNoiseStream
+end
