@@ -4,7 +4,7 @@ function tempfilename()
   "tempfile_" * strftime("%Y%m%d_%H%M%S_", time()) * string(rand(1:1000000000)) * ".tmp"
 end
 
-function gzip_length(str)
+function gzip_length(str) # We should not have to write to disk but couldn't find a way to do it in mem with GZip.jl. Investigate alternatives!
   fn = tempfilename()
   gfh = GZip.open(fn, "w")
   println(gfh, str)
