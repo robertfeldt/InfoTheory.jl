@@ -108,7 +108,14 @@ ncdl(map((i) -> genintarrays(3), 1:N))
 ncdl(map((i) -> genintarrays(8), 1:N))
 
 # We expect generators generating arrays of same length to have larger ncd if they sample a 
-# larger span of the ints (on average):
+# larger span of the ints:
 ncdl(map((i) -> genintarrays(5, -5, 5), 1:N))
 ncdl(map((i) -> genintarrays(5, -50, 50), 1:N))
 ncdl(map((i) -> genintarrays(5, -5000, 5000), 1:N))
+
+# Calculations are quite slow though:
+@time ncdl(map((i) -> genintarrays(5, -5000, 5000), 1:N))
+# although I imagine there are many ways we can speed this up if it is really useful.
+# A problem with these types of InfoTheory results though is that it is less clear how one
+# can incorporate biases in which test sets one prefer. But maybe we solve that with other
+# aspects of our tools.
