@@ -64,6 +64,7 @@ function ncdl(Xstrs::Array{ASCIIString, 1}, clen = zliblength, return_indexset =
 
     # NCD1 = (G(X) - minimum(G(X))) / maxGxminus1
     ncd1 = (clen(join(Xstrs[selected], "")) - minimum(Gxs[selected])) / maxGxminus1
+    #println("$numselected: $ncd1")
     if ncd1 > maxncd1
       maxncd1 = ncd1
       best = copy(selectedindices)
@@ -97,12 +98,12 @@ ncdl([1,2,3,4,5])
 
 # We expect a random uniform sampling to give a larger ncd than a normal sampled one if the latter
 # is confined to smaller range.
-N = 200
+N = 20
 ncdl(int(100.0 * rand(N)))
 ncdl(int(50 + 5*randn(N)))
 
 # We expect a generator of arrays of integers that can generate longer arrays to have larger NCDL
-# than one which generates smaller ints.
+# than one which generates shorter arrays.
 genintarrays(maxsize, minInt = -100, maxInt = 100) = map((i) -> rand(minInt:maxInt), 1:rand(0:maxsize))
 ncdl(map((i) -> genintarrays(3), 1:N))
 ncdl(map((i) -> genintarrays(8), 1:N))
