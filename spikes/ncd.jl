@@ -1,6 +1,19 @@
 using Zlib
+zliblength(str) = length(Zlib.compress(str,9,false,true))
 
-zliblength(str) = length(compress(str,9,false,true))
+# If Blosc is installed we can also use it for compression.
+isinstalled(pkg) = try
+    isa(Pkg.installed(pkg), VersionNumber)
+  catch
+    return false
+end
+
+if isinstalled("Blosc")
+  using Blosc
+  lz4hclength(s) = length(Blosc.compress(convert(Vector{Uint8}, s), clevel=9, cname=:lz4hc))
+  lz4length(s) = length(Blosc.compress(convert(Vector{Uint8}, s), clevel=9, cname=:lz4))
+  blosczliblength(s) = length(Blosc.compress(convert(Vector{Uint8}, s), clevel=9, cname=:zlib))
+end
 
 # If we are using GZip we need to save to file:
 #using GZip
@@ -98,7 +111,7 @@ ncdl([1,2,3,4,5])
 
 # We expect a random uniform sampling to give a larger ncd than a normal sampled one if the latter
 # is confined to smaller range.
-N = 20
+N = 200
 ncdl(int(100.0 * rand(N)))
 ncdl(int(50 + 5*randn(N)))
 
@@ -115,7 +128,9 @@ ncdl(map((i) -> genintarrays(5, -50, 50), 1:N))
 ncdl(map((i) -> genintarrays(5, -5000, 5000), 1:N))
 
 # Calculations are quite slow though:
-@time ncdl(map((i) -> genintarrays(5, -5000, 5000), 1:N))
+input = map((i) -> genintarrays(5, -5000, 5000), 1:N);
+@time ncdl(input, zliblength)
+@time ncdl(input, lz4hclength)
 # although I imagine there are many ways we can speed this up if it is really useful.
 # A problem with these types of InfoTheory results though is that it is less clear how one
 # can incorporate biases in which test sets one prefer. But maybe we solve that with other
