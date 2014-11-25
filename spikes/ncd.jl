@@ -144,6 +144,7 @@ ncdl(map((i) -> genintarrays(5, -5000, 5000), 1:N))
 # Calculations are quite slow though:
 input = map((i) -> genintarrays(5, -5000, 5000), 1:N);
 @time ncdl(input, zliblength)
+@time ncdl(input, lz4length)
 @time ncdl(input, lz4hclength)
 @time ncdl(input, qlz4length)
 @time ncdl(input, blosclzlength)
@@ -152,3 +153,30 @@ input = map((i) -> genintarrays(5, -5000, 5000), 1:N);
 # A problem with these types of InfoTheory results though is that it is less clear how one
 # can incorporate biases in which test sets one prefer. But maybe we solve that with other
 # aspects of our tools.
+
+# Benchmark two generators and count the number of times that the first give higher
+# NCD than the second one. The generators generate one instance only, they will be called
+# repeatedly to create the multisets used for comparison.
+function ncd_compare_generators(gen1, gen2;
+  lengths = [2, 5, 10, 20, 50, 100],
+  reps = 30,
+  clen = lz4length)
+
+  counts_higher_ncd = map(lengths) do len
+  println("Length = $len")
+    count = 0
+    for r in 1:reps
+      list1 = map((i) -> gen1(), 1:len)
+      list2 = map((i) -> gen2(), 1:len)
+      ncd1 = ncdl(list1, clen)
+      ncd2 = ncdl(list2, clen)
+      count += (ncd1 > ncd2 ? 1 : 0)
+    end
+    count
+  end
+
+  100.0 * counts_higher_ncd / reps
+end
+
+ncd_compare_generators(() -> genintarrays(8), () -> genintarrays(6))
+ncd_compare_generators(() -> genintarrays(5, -50, 50), () -> genintarrays(5, -5, 5); clen = lz4length)
