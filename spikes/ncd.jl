@@ -14,10 +14,19 @@ end
 # an order of magnitude faster.
 if isinstalled("Blosc")
   using Blosc
-  lz4hclength(s) = length(Blosc.compress(convert(Vector{Uint8}, s), clevel=9, cname=:lz4hc))
-  lz4length(s) = length(Blosc.compress(convert(Vector{Uint8}, s), clevel=9, cname=:lz4))
-  qlz4length(s) = length(Blosc.compress(convert(Vector{Uint8}, s), clevel=1, cname=:lz4))
-  blosczliblength(s) = length(Blosc.compress(convert(Vector{Uint8}, s), clevel=9, cname=:zlib))
+  blosc_compress(s, level = 9, shuffle = false, compressor = "blosclz") = begin
+    Blosc.set_compressor(compressor)
+    compress(s; level = level, shuffle = shuffle)
+  end
+  blosclzlength(s) = length(blosc_compress(s, 9, false, "blosclz"))
+  lz4length(s) = length(blosc_compress(s, 9, false, "lz4"))
+  lz4hclength(s) = length(blosc_compress(s, 9, false, "lz4hc"))
+  snappylength(s) = length(blosc_compress(s, 9, false, "snappy"))
+  blosczliblength(s) = length(blosc_compress(s, 9, false, "zlib"))
+
+  qlz4length(s) = length(blosc_compress(s, 1, false, "lz4"))
+  qsnappylength(s) = length(blosc_compress(s, 1, false, "snappy"))
+  qblosczliblength(s) = length(blosc_compress(s, 1, false, "zlib"))
 end
 
 # If we are using GZip we need to save to file:
@@ -36,9 +45,9 @@ end
 #  "tempfile_" * strftime("%Y%m%d_%H%M%S_", time()) * string(rand(1:1000000000)) * ".tmp"
 #end
 
-ncd(x, y, clen = zliblength) = ncd(string(x), string(y), clen)
+ncd(x, y, clen = lz4length) = ncd(string(x), string(y), clen)
 
-function ncd(x::ASCIIString, y::ASCIIString, clen = zliblength)
+function ncd(x::ASCIIString, y::ASCIIString, clen = lz4length)
   cxy = clen(x * y)
   cx = clen(x)
   cy = clen(y)
@@ -50,11 +59,11 @@ end
 #  A. Cohen & P. Vitanyi, "", 2012, http://arxiv.org/pdf/1212.5711.pdf
 # This is a heuristic to calc the NCDL in O(n^2) operations since the def of NCDL implies
 # a O(2^n) algorithm.
-function ncdl{T <: Any}(X::Array{T, 1}, clen = zliblength)
+function ncdl{T <: Any}(X::Array{T, 1}, clen = lz4length)
   ncdl(map(string, X), clen)
 end
 
-function ncdl(Xstrs::Array{ASCIIString, 1}, clen = zliblength, return_indexset = false)
+function ncdl(Xstrs::Array{ASCIIString, 1}, clen = lz4length, return_indexset = false)
   Gxs = map(clen, Xstrs)
   n = length(Xstrs)
 
@@ -136,6 +145,9 @@ ncdl(map((i) -> genintarrays(5, -5000, 5000), 1:N))
 input = map((i) -> genintarrays(5, -5000, 5000), 1:N);
 @time ncdl(input, zliblength)
 @time ncdl(input, lz4hclength)
+@time ncdl(input, qlz4length)
+@time ncdl(input, blosclzlength)
+
 # although I imagine there are many ways we can speed this up if it is really useful.
 # A problem with these types of InfoTheory results though is that it is less clear how one
 # can incorporate biases in which test sets one prefer. But maybe we solve that with other
