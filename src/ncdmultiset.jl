@@ -71,6 +71,18 @@ function ncdm{T <: Any}(X::Array{T, 1}, compressor::Compressor = ZlibC)
   ncd1_sequence(X, compressor)[1]
 end
 
+# We can use an NCD1 sequence to sort the objects if we assume they should enter
+# in the reverse order to how they were deleted from the sequence. The elements
+# that could not be deleted are randomly added at the start of the sequence.
+function sortperm_ncd1_order{T <: Any}(X::Array{T, 1}, ncd1seq = false)
+  if ncd1seq == false
+    maxncd1, ncd1seq, maxatindex = ncd1_sequence(X)
+  end
+  deletion_order = map(t -> t[2], ncd1seq)
+  non_deleted = setdiff(Set(1:length(X)), deletion_order)
+  indices = vcat(shuffle(non_deleted), reverse(deletion_order))
+end
+
 using Plotly
 Plotly.signin("robertfeldt", "903bj0pymv")
 
