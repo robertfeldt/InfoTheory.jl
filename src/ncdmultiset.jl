@@ -71,14 +71,24 @@ function ncdm{T <: Any}(X::Array{T, 1}, compressor::Compressor = ZlibC)
   ncd1_sequence(X, compressor)[1]
 end
 
-# We can plot the NCD1 sequence with Winston
-using Winston
+using Plotly
+Plotly.signin("robertfeldt", "903bj0pymv")
 
 # We plot in reverse order and insert zeroes for values were we did not have enough
 # information.
-function ncd1plot{T <: Any}(X::Array{T, 1}, compressor::Compressor = ZlibC)
+function ncd1plot{T <: Any}(X::Array{T, 1}; compressor::Compressor = ZlibC, plotname = "ncd1plot")
   ncdmvalue, seq = ncd1_sequence(X, compressor)
-  num_zeros = length(X) - length(s)
-  values = [zeros(Float64, num_zeros) map(t -> t[1], reverse(seq))]
-  plot(1:length(values), values)
+  num_zeros = length(X) - length(seq)
+  values = vcat(zeros(Float64, num_zeros), map(t -> t[1], reverse(seq)))
+  x = 1:length(values)
+
+  # Now plot it with plotly
+  ncd1_sequence_data = [
+    "x" => x,
+    "y" => values, 
+    "type" => "scatter"
+  ]
+  data = [ncd1_sequence_data]
+  response = Plotly.plot(data, ["filename" => plotname, "fileopt" => "overwrite"])
+  response["url"]
 end

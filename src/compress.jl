@@ -3,7 +3,7 @@ using Zlib
 abstract Compressor
 
 minlen(c::Compressor) = c.minlen
-clen(c::Compressor, str) = length(compress(compressor, str))
+clen(c::Compressor, str) = length(compress(c, str))
 
 type ZlibCompressor <: Compressor
   minlen::Int
