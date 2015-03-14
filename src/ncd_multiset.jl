@@ -1,4 +1,4 @@
-# For classification of an object x we want to now for which multiset the addition
+# For classification of an object x we want to know for which multiset the addition
 # of x would increase the NCD1 (left-most part of NCDL) the least. So we need a way to calc
 # this delta_diameter(A, x). First lets create a type for NCD multi-sets.
 type NCDMultiset{T <: Any}

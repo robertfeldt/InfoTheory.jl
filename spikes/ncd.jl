@@ -121,11 +121,13 @@ end
 # (evaluated with something like a Wilcoxon test, for example) is likely to yield higher fault 
 # finding ability.
 
+ncdl(ary) = ncdm(ary, Lz4hc)
+
 ncdl([1,2,3,4,5])
 
 # We expect a random uniform sampling to give a larger ncd than a normal sampled one if the latter
 # is confined to smaller range.
-N = 200
+N = 100
 ncdl(int(100.0 * rand(N)))
 ncdl(int(50 + 5*randn(N)))
 
