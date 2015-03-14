@@ -71,8 +71,8 @@ function ncdm{T <: Any}(X::Array{T, 1}, compressor::Compressor = ZlibC)
   ncd1_sequence(X, compressor)[1]
 end
 
-# We can plot the NCD1 sequence with Gadfly
-using Gadfly
+# We can plot the NCD1 sequence with Winston
+using Winston
 
 # We plot in reverse order and insert zeroes for values were we did not have enough
 # information.
@@ -80,5 +80,5 @@ function ncd1plot{T <: Any}(X::Array{T, 1}, compressor::Compressor = ZlibC)
   ncdmvalue, seq = ncd1_sequence(X, compressor)
   num_zeros = length(X) - length(s)
   values = [zeros(Float64, num_zeros) map(t -> t[1], reverse(seq))]
-  plot(x = 1:length(values), y = values)
+  plot(1:length(values), values)
 end
