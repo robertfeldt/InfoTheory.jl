@@ -59,4 +59,6 @@ Lz4hc = BloscCompressor("lz4hc")
 Snappy = BloscCompressor("snappy")
 BloscZlib = BloscCompressor("zlib")
 
+QLz4hc = BloscCompressor("lz4hc"; level = 1)
+
 end # end if isinstalled("Blosc")
