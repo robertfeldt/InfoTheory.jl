@@ -36,6 +36,7 @@ end
 if isinstalled("Blosc")
 
 using Blosc
+import Blosc.compress
 blosc_compress(s, level = 9, shuffle = false, compressor = "blosclz") = begin
   Blosc.set_compressor(compressor)
   Blosc.compress(s; level = level, shuffle = shuffle)
