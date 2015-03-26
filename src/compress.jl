@@ -12,6 +12,7 @@ type ZlibCompressor <: Compressor
   ZlibCompressor(; minlen = 5, level = 9) = new(minlen, level)
 end
 
+import Zlib.compress
 compress(zc::ZlibCompressor, str) = Zlib.compress(str, zc.level, false, true)
 
 # Convenience function for finding the minlen for a compressor
