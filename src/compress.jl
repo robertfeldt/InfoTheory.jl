@@ -3,7 +3,7 @@ using Zlib
 abstract Compressor
 
 minlen(c::Compressor) = c.minlen
-clen(c::Compressor, str) = length(compress(c, str))
+clen(c::Compressor, str) = length(compress_str(c, str))
 
 type ZlibCompressor <: Compressor
   minlen::Int
@@ -12,8 +12,7 @@ type ZlibCompressor <: Compressor
   ZlibCompressor(; minlen = 5, level = 9) = new(minlen, level)
 end
 
-import Zlib.compress
-compress(zc::ZlibCompressor, str) = Zlib.compress(str, zc.level, false, true)
+compress_str(zc::ZlibCompressor, str) = Zlib.compress(str, zc.level, false, true)
 
 # Convenience function for finding the minlen for a compressor
 function find_min_len_for_compression(compressor, seedStr = "a", maxReps = 1000)
@@ -36,7 +35,6 @@ end
 if isinstalled("Blosc")
 
 using Blosc
-import Blosc.compress
 blosc_compress(s, level = 9, shuffle = false, compressor = "blosclz") = begin
   Blosc.set_compressor(compressor)
   Blosc.compress(s; level = level, shuffle = shuffle)
@@ -50,8 +48,7 @@ type BloscCompressor <: Compressor
   BloscCompressor(name; minlen = 128, level = 9) = new(minlen, level, name)
 end
 
-# Compressed length of a string.
-compress(c::BloscCompressor, str) = blosc_compress(str, c.level, false, c.compressorName)
+compress_str(c::BloscCompressor, str) = blosc_compress(str, c.level, false, c.compressorName)
 
 # Define specific compressors which can be used directly
 ZlibC = ZlibCompressor()
