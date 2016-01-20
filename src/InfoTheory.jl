@@ -6,6 +6,7 @@ using NearestNeighbors
 export differential_entropy
 export IntConfusionMatrix, count
 #export NCDMultiset, ncd1, delta_diameter
+export compress, clen
 export ncd
 export ncd1_sequence, ncdm, ncd1plot
 
@@ -18,6 +19,6 @@ include("utils.jl")
 include("utils/isinstalled.jl")
 include("compress.jl")
 include("ncd.jl")
-include("ncdmultiset.jl")
+#include("ncdmultiset.jl")
 
 end # module

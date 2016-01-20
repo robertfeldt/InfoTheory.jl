@@ -22,7 +22,7 @@ num_failures(tr::TestReporter) = length(tr.failures)
 num_errors(tr::TestReporter) = length(tr.errors)
 num_assertions(tr::TestReporter) = tr.num_successes + num_failures(tr) + num_errors(tr)
 
-pluralize(str::String, num) = (num == 1) ? str : (str * "s")
+pluralize(str::AbstractString, num) = (num == 1) ? str : (str * "s")
 
 function report(tr::TestReporter)
   elapsed = time() - tr.start_time
