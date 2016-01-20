@@ -74,7 +74,7 @@ function ncdl{S <: AbstractString}(Xstrs::Vector{S}, c::Compressor = LibzCompres
     maxGxminus1 = -Inf
     for i in selectedindices
       selected[i] = false
-      newGxminus1 = clen(join(Xstrs[selected], ""))
+      newGxminus1 = clen(c, join(Xstrs[selected], ""))
       selected[i] = true
       if newGxminus1 > maxGxminus1
         maxGxminus1 = newGxminus1
@@ -83,7 +83,7 @@ function ncdl{S <: AbstractString}(Xstrs::Vector{S}, c::Compressor = LibzCompres
     end
 
     # NCD1 = (G(X) - minimum(G(X))) / maxGxminus1
-    ncd1 = (clen(join(Xstrs[selected], "")) - minimum(Gxs[selected])) / maxGxminus1
+    ncd1 = (clen(c, join(Xstrs[selected], "")) - minimum(Gxs[selected])) / maxGxminus1
     #println("$numselected: $ncd1")
     if ncd1 > maxncd1
       maxncd1 = ncd1
