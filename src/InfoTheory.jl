@@ -9,6 +9,7 @@ export IntConfusionMatrix, count
 export compress, clen
 export ncd
 export ncd1_sequence, ncdm, ncd1plot
+export ncdmatrix
 
 include("knn_entropy.jl")
 include("confusion_matrix.jl")
@@ -19,6 +20,7 @@ include("utils.jl")
 include("utils/isinstalled.jl")
 include("compress.jl")
 include("ncd.jl")
+include("ncd_matrix.jl")
 #include("ncdmultiset.jl")
 
 end # module

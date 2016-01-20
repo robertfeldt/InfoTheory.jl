@@ -5,4 +5,5 @@ Minitest.do_tests() do
   #Minitest.include("test_entropy.jl")
   Minitest.include("test_compress.jl")
   Minitest.include("test_ncd.jl")
+  Minitest.include("test_ncd_matrix.jl")
 end
